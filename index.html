@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ParkEase | Parking Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-icon">P</span><span>ParkEase</span></div>
+    <p class="nav-label">WORKSPACE</p>
+    <button class="nav-item active" data-view="dashboard">▦ <span>Dashboard</span></button>
+    <button class="nav-item" data-view="parking">▤ <span>Parking Slots</span></button>
+    <button class="nav-item" data-view="vehicles">▣ <span>Vehicles</span></button>
+    <button class="nav-item" data-view="reports">▥ <span>Reports</span></button>
+    <div class="sidebar-bottom"><div class="avatar">A</div><div><b>Admin</b><small>Parking manager</small></div></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div><p class="eyebrow">PARKING OPERATIONS</p><h1 id="page-title">Dashboard</h1></div>
+      <div class="top-actions"><span class="live-dot">System online</span><button class="primary" id="quick-entry">+ Vehicle entry</button></div>
+    </header>
+
+    <section id="dashboard-view" class="view">
+      <div class="welcome"><div><p class="eyebrow light">OVERVIEW</p><h2>Good day, Admin 👋</h2><p>Here’s what’s happening in your parking facility.</p></div><div class="date-chip" id="today"></div></div>
+      <div class="stats">
+        <article class="stat-card"><div class="stat-top"><span>Total slots</span><span class="stat-icon purple">▦</span></div><strong id="total-slots">40</strong><small>Across all parking zones</small></article>
+        <article class="stat-card"><div class="stat-top"><span>Available slots</span><span class="stat-icon green">✓</span></div><strong id="available-slots">40</strong><small class="positive">Ready for parking</small></article>
+        <article class="stat-card"><div class="stat-top"><span>Occupied slots</span><span class="stat-icon orange">▣</span></div><strong id="occupied-slots">0</strong><small>Currently parked vehicles</small></article>
+        <article class="stat-card"><div class="stat-top"><span>Today's revenue</span><span class="stat-icon blue">₹</span></div><strong id="revenue">₹0</strong><small>From completed parking sessions</small></article>
+      </div>
+      <div class="content-grid">
+        <section class="panel"><div class="panel-heading"><div><h3>Parking occupancy</h3><p>Live status of your parking facility</p></div><span class="tag">LIVE</span></div><div class="occupancy"><div class="ring" id="ring"><div><strong id="occupancy-percent">0%</strong><small>Occupied</small></div></div><div class="legend"><p><i class="dot green-bg"></i> Available <b id="legend-available">40</b></p><p><i class="dot orange-bg"></i> Occupied <b id="legend-occupied">0</b></p></div></div></section>
+        <section class="panel"><div class="panel-heading"><div><h3>Recent activity</h3><p>Latest vehicle movements</p></div><button class="text-button" data-goto="vehicles">View all</button></div><div id="recent-activity" class="activity-list"><div class="empty">No vehicle activity yet. Record an entry to get started.</div></div></section>
+      </div>
+      <section class="panel slots-panel"><div class="panel-heading"><div><h3>Slot overview</h3><p>Quick view of the first 20 parking spaces</p></div><button class="text-button" data-goto="parking">Manage slots →</button></div><div id="mini-slots" class="slot-grid"></div></section>
+    </section>
+
+    <section id="parking-view" class="view hidden">
+      <div class="section-intro"><div><h2>Parking slots</h2><p>Monitor and manage every space in the facility.</p></div><div class="filters"><select id="slot-filter"><option value="all">All slots</option><option value="available">Available</option><option value="occupied">Occupied</option></select></div></div>
+      <div class="slot-key"><span><i class="dot green-bg"></i> Available</span><span><i class="dot orange-bg"></i> Occupied</span></div>
+      <div id="all-slots" class="slot-grid large-slots"></div>
+    </section>
+
+    <section id="vehicles-view" class="view hidden">
+      <div class="section-intro"><div><h2>Vehicle management</h2><p>Register arrivals and record departures.</p></div><button class="primary" id="add-vehicle">+ New entry</button></div>
+      <section class="panel table-panel"><div class="panel-heading"><div><h3>Vehicle log</h3><p>All current and completed parking sessions</p></div><input id="vehicle-search" class="search" placeholder="Search plate or owner…"></div><div class="table-wrap"><table><thead><tr><th>VEHICLE</th><th>OWNER</th><th>SLOT</th><th>ENTRY TIME</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="vehicle-rows"></tbody></table></div></section>
+    </section>
+
+    <section id="reports-view" class="view hidden">
+      <div class="section-intro"><div><h2>Reports</h2><p>A quick summary of parking activity and earnings.</p></div><button class="primary" id="export-csv">↓ Export CSV</button></div>
+      <div class="stats report-stats"><article class="stat-card"><span>Total sessions</span><strong id="report-sessions">0</strong><small>Recorded vehicle entries</small></article><article class="stat-card"><span>Completed sessions</span><strong id="report-completed">0</strong><small>Vehicles checked out</small></article><article class="stat-card"><span>Total revenue</span><strong id="report-revenue">₹0</strong><small>Collected parking fees</small></article></div>
+      <section class="panel"><h3>How billing works</h3><p class="muted">The demo charges ₹30 for the first hour and ₹20 for every additional hour (or part of an hour). The amount is calculated when a vehicle checks out.</p></section>
+    </section>
+  </main>
+
+  <div class="modal-backdrop hidden" id="entry-modal">
+    <form class="modal" id="entry-form">
+      <button type="button" class="close" id="close-modal">×</button>
+      <p class="eyebrow">NEW PARKING SESSION</p><h2>Register vehicle entry</h2><p class="muted">Enter vehicle details to assign an available slot.</p>
+      <label>Vehicle registration number<input id="plate" required maxlength="15" placeholder="e.g. RJ14AB1234"></label>
+      <label>Owner name<input id="owner" required maxlength="50" placeholder="Enter owner's name"></label>
+      <label>Vehicle type<select id="vehicle-type"><option>Car</option><option>Bike</option><option>SUV</option><option>Other</option></select></label>
+      <label>Parking slot<select id="slot-choice" required></select></label>
+      <div class="form-note">Rates: ₹30 first hour · ₹20 each additional hour</div>
+      <button class="primary full" type="submit">Confirm vehicle entry</button>
+    </form>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="script.js"></script>
+</body>
+</html>
